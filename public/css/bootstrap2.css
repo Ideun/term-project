@@ -1,0 +1,22 @@
+table {
+  margin-top: 3px;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+caption {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  color: #636c72;
+  text-align: left;
+  caption-side: bottom;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+th{
+  text-align: center;
+}
