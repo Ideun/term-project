@@ -18,13 +18,16 @@
 
 	<link href="{{asset('css/css/styles.css')}}" rel="stylesheet">
 	<link href="{{asset('css/css/responsive.css')}}" rel="stylesheet">
-
+	@yield('headJs')
+	@yield('headStyle')
+	@yield('css')
+	@yield('cssNscript')
 </head>
 <body>
 	<header>
 		@yield('header')
 	</header>
-
+	@yield('content')
 
 	<div class="main-slider">
 		<div id="slider">
@@ -32,14 +35,6 @@
 		</div><!-- slider -->
 	</div><!-- main-slider -->
 
-
-	<section class="section blog-area">
-		<div class="container">
-			1. Brand<br>
-			2. Home에 내용<br>
-			3. 댓글
-		</div><!-- container -->
-	</section><!-- section -->
 
 <!-- SCRIPTS -->
 

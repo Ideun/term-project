@@ -28,14 +28,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <header>
-    @yield('header')
-  </header>
+  @extends('index')
+
+  @section('header')
+      @include('components.header')
+  @endsection
 
 <div class="jumbotron">
-    
+
   </div>
-  
+
  <br><br><br> <br><br><br>
 
     <div class="container">
@@ -45,7 +47,7 @@
   <form action="{{route('register')}}" method="post">
     @csrf
     <div class="form-group">
-          <label for="id">Id:</label> 
+          <label for="id">Email:</label>
           <input type="text" class="form-control" id="usr" name="email">
         </div>
         <div class="form-group">

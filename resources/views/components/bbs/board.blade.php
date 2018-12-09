@@ -1,33 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>TITLE</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta charset="UTF-8">
+@extends('index')
 
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-
-  <!-- Stylesheets -->
-  <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet">
-  <link href="{{asset('css/ionicons.css')}}" rel="stylesheet">
-  <link href="{{asset('css/layerslider.css')}}" rel="stylesheet">
-
-  <link href="{{asset('css/css/styles.css')}}" rel="stylesheet">
-  <link href="{{asset('css/css/responsive.css')}}" rel="stylesheet">
-
-  
-  <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-  <!-- Popper JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
-
-  <!-- Latest compiled JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>   
+@section('headStyle')
   <style>
     a:hover {text-decoration: none};
     }
@@ -58,21 +31,20 @@
   background-color: #ffad4d;
   border-color: #ffad4d;
 }
-  </style>  
+  </style>
 
 
-</head>
-<body>
-  <header>
-    @yield('header')
-  </header>
+@section('header')
+  @include('components.header')
+@endsection
 
+@section('content')
+<div class="jumbotron">
 
-
-<div class="jumbotron"> 
-  
 </div>
-<br><br><br><br><br>
+
+<br><br><br> <br><br>
+
 <div class="container"> 
   <table class="table table-hover">
     <tr>
@@ -82,88 +54,60 @@
       <th>작성일시</th>
       <th>조회수</th>
     </tr>
-  <?php
-  /*
-    require_once("BoardDao.php");
-    require_once("../tools.php");
 
-    $page = requestValue("page");
-    if($page <1)
-      $page = 1; // 278p24줄 밑 설명
-
-    $dao = new BoardDao();
-    $startRecord = ($page-1)*10;
-    //$msgs = $dao->getManyMsgs();
-    $msgs = $dao->getPageMsgs($startRecord, 10);
-    */
-  ?> 
-  <?php foreach($msgs as $msg) : ?>
+  @foreach($msgs as $msg)
     <tr align="center">
       
-      <td><?= $msg["Num"] ?> </td>          
-      <td><a href="view.php?num=<?= $msg["Num"]?>&page=<?= $page ?>"> <?= $msg["Title"] ?> </a> </td>
-      <td><?= $msg["Writer"] ?> </td>
-      <td><?= $msg["Regtime"] ?> </td>
-      <td><?= $msg["Hits"] ?> </td>
+      <td>{{$msg["id"]}} </td>
+      <td><a href="{{route('boards.show', ['id'=>$msg["id"],'page'=>$page])}}"> {{$msg["title"]}} </a> </td>
+      <td>{{$msg["writer"]}} </td>
+      <td>{{$msg["created_at"]}} </td>
+      <td>{{$msg["hits"]}} </td>
     </tr>
-  <?php endforeach ?> 
-  </table>  
+  @endforeach
+  </table>
+
+  <br>
+  <!-- 페이지네이션 -->
+  <div class="pagination justify-content-center">
+  <div>
+    <div class="col-5">
+    </div>
+    <div class="col-5">
+      {{$msgs->appends(['search'=>$search,'state'=>$state])->links()}}
+    </div>
+  </div>
+  </div>
+  <select class="custom-select" id="inputState" name="state">
+    <option value="title">제목</option>
+    <option value="content">글내용</option>
+    <option value="titlencontent">제목+글내용</option>
+    <option value="writer">작성자</option>
+  </select>
+  <input class="form-control" type="search" name="search" id="inputText" placeholder="search" aria-label="Search">
+
 </div>
 
-<?php
-  $numPageLinks = 3;//한 페이지에 출력할 페이지 링크 수
-  $numMsgs = 10; // 한 페이지에 출력할 게시글 수-num_lines
-  $startPage = floor(($page-1)/$numPageLinks)*$numPageLinks+1;
-  $endPage = $startPage + ($numPageLinks-1);
-  $count = $dao->getTotalCount();//전체 게시글 수-numMsgs
-  $totalPages = ceil($count/$numMsgs);
-  if($endPage > $totalPages)
-    $endPage = $totalPages;
-
-?>
-
-<ul class="pagination justify-content-center">
-<?php if($startPage >1) :?>
-    <li class="page-item"><a class="page-link" href="board.php?page=<?= $startPage- $numPageLinks ?>">&lt;</a></li>
-<?php endif ?>
-
-<?php for($i=$startPage; $i <= $endPage; $i++) : ?>
-    <?php if($i == $page) :?>
-      <li class="page-item active"><a class="page-link" href="board.php?page=<?= $i ?>">
-<b>
-        <?= $i ?></b></a></li>
-        
-    <?php else :?>
-      <li class="page-item"><a class="page-link" href="board.php?page=<?= $i ?>"><?= $i ?></a></li>
-      
-    <?php endif ?>
-   
-<?php endfor ?>
-
-<?php if($endPage < $totalPages) :?>
-  <li class="page-item"><a class="page-link" href="board.php?page= <?= $endPage+1 ?>">&gt;</a></li>
-<!-- $endPage+1 = $startPage + $numPageLinks -->
-<?php endif ?>
-</ul>
+<br>
 
 
-<!-- 검색창 구현하기 -->
 
+<div class="float-right" style="margin-right:205px">
+  <button class="btn btn-outline-warning" type="button" onclick="searchBtn({{$page}})">검색</button>
 
-<div class="float-right" style="margin-right:205px"> 
-  <button class="btn btn-outline-warning" onclick="location.href='write_form.php'">글쓰기</button>
+  <button class="btn btn-outline-warning" onclick="location.href='{{route('boards.create')}}'">글쓰기</button>
+
 </div>
+@endsection
 
-<!-- SCRIPTS -->
+  <script>
 
-  <script src="/term2/js/jquery-3.1.1.min.js"></script>
+      function searchBtn(page) {
+          var searchValue = document.getElementById('inputState').value;
+          var search = document.getElementById('inputText').value;
+          page = 1;
+          var url = 'boards?search=' + search + '&state=' + searchValue + '&page=' + page;
 
-  <script src="/term2/js/tether.min.js"></script>
-
-  <script src="/term2/js/bootstrap.js"></script>
-
-  <script src="/term2/js/layerslider.js"></script>
-
-  <script src="/term2/js/scripts.js"></script>
-</body>
-</html>
+          location.href = url;
+      }
+  </script>

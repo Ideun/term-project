@@ -28,10 +28,12 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   </head>
-  <body> 
-    <header>
-    @yield('header')
-  </header>
+  <body>
+  @extends('index')
+
+  @section('header')
+      @include('components.header')
+  @endsection
 
 
   <div class="jumbotron">
@@ -41,7 +43,7 @@
  <br><br><br> <br><br><br>
 
     <div class="container">
-  <h3>회원정보수정</h3>
+  <h3>회원정보수정</h3><br>
   <p>회원정보 수정을 위해 아래의 정보를 작성해 주세요.</p>
   <br>
   <form action="{{url('update')}}" method="post">
@@ -52,26 +54,18 @@
 			value="{{$member["email"]}}" 
            id="usr" name="email">
         </div>
-        <div class="form-group">
-          <label for="pwd">Password:</label>
-          <input type="password" class="form-control" id="pwd" name="password" value="{{($member["password"])}}">
-        </div>
+
         <div class="form-group">
               <label for="name">Name:</label>
-              <input type="text" class="form-control" id="name" name="name" value="<?= $member["name"] ?>">
-            </div> <!-- decrypt -->
+              <input type="text" class="form-control" id="name" name="name" value="{{$member["name"]}}">
+            </div>
         <button type="submit" class="btn btn-primary">Submit</button> <!--클래스는 여러개 가질 수 있음. 라벨 안에다 인풋을 넣어도 됨-->
 
       </form>
+        <br>
+        <a href="{{url('passwordform')}}">비밀번호 재설정</a>
+
     </div>
-    <script src="/term2/js/jquery-3.1.1.min.js"></script>
 
-  <script src="/term2/js/tether.min.js"></script>
-
-  <script src="/term2/js/bootstrap.js"></script>
-
-  <script src="/term2/js/layerslider.js"></script>
-
-  <script src="/term2/js/scripts.js"></script>
   </body>
 </html>
